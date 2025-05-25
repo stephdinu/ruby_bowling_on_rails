@@ -10,22 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_05_25_145222) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_25_173724) do
   create_table "frames", force: :cascade do |t|
     t.string "type"
     t.integer "tries"
-    t.integer "pins_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["pins_id"], name: "index_frames_on_pins_id"
+    t.integer "game_id", null: false
+    t.integer "position"
+    t.index ["game_id"], name: "index_frames_on_game_id"
   end
 
   create_table "games", force: :cascade do |t|
     t.integer "player_id", null: false
-    t.integer "frames_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["frames_id"], name: "index_games_on_frames_id"
     t.index ["player_id"], name: "index_games_on_player_id"
   end
 
@@ -33,6 +32,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_25_145222) do
     t.boolean "down"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "frame_id", null: false
+    t.index ["frame_id"], name: "index_pins_on_frame_id"
   end
 
   create_table "players", force: :cascade do |t|
@@ -42,7 +43,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_25_145222) do
     t.datetime "updated_at", null: false
   end
 
-  add_foreign_key "frames", "pins", column: "pins_id"
-  add_foreign_key "games", "frames", column: "frames_id"
+  add_foreign_key "frames", "games"
   add_foreign_key "games", "players"
+  add_foreign_key "pins", "frames"
 end
