@@ -1,5 +1,6 @@
 class Frame < ApplicationRecord
   has_many :pins
+  belongs_to :game
 
   after_create :create_default_pins
 
