@@ -1,5 +1,82 @@
+
 # Ruby Bowling on Rails
 
-Ruby on Rails API for a bowling game.
+This is a Ruby on Rails API-only application which simulates a simple ten-pin bowling game.# Ruby Bowling on Rails
 
-This README will be completed at a later date.
+This is a Ruby on Rails API-only application that simulates a ten-pin bowling game. A `Player` can play a `Game` that consists of ten `Frames`, each containing `Pins` with logic for scoring strikes, spares, and open frames — including special rules for the 10th frame.
+
+---
+
+## Models Overview
+
+### Player
+- `name`: string
+- `score`: integer (default: 0)
+- Associations:
+  - `has_many :games`
+
+### Game
+- Belongs to a `Player`
+- Has `10 Frames` generated upon creation
+- Game logic calculates score based on the standard bowling rules
+
+### Frame
+- Belongs to a `Game`
+- Has `10 Pins` generated upon creation
+- Tracks number of tries per frame
+- Handles strike, spare, and open frame logic
+
+### Pin
+- Belongs to a `Frame`
+- `down`: boolean (default: false)
+
+---
+
+## Features
+
+- Support for full ten-frame games
+- Proper handling of strikes, spares, and bonus rolls
+- Auto-generation of frames and pins
+- Accurate scoring based on future rolls
+- RSpec test suite with edge case coverage
+
+---
+
+## Getting Started
+
+### 1. Clone the Repo
+
+```bash
+git clone https://github.com/stephdinu/ruby_bowling_on_rails.git
+cd ruby_bowling_on_rails
+```
+### Install Dependencies
+ ```bash
+ bundle install
+```
+### Setup Database
+```bash
+ rails db:create
+ rails db:migrate
+```
+### Run Tests (RSpec)
+```bash
+bundle exec rspec
+```
+## Example Usage in Rails Console
+After running `rails c`, enter the following:
+```bash
+player = Player.create(name: "Alice")
+game = player.games.create
+# Automatically creates 10 frames with 10 pins each
+# Update pin states manually for now
+
+frame1 = game.frames.first
+frame1.pins.each { |pin| pin.update(down: true) } 
+# simulate a strike
+
+frame1.update(tries: 1)
+
+GameScoreboardService.new(game).calculate_total_score
+player.reload.score
+```
