@@ -10,7 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_05_25_140506) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_25_143551) do
+  create_table "frames", force: :cascade do |t|
+    t.string "type"
+    t.integer "tries"
+    t.integer "pins_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["pins_id"], name: "index_frames_on_pins_id"
+  end
+
   create_table "pins", force: :cascade do |t|
     t.boolean "down"
     t.datetime "created_at", null: false
@@ -23,4 +32,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_25_140506) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
+
+  add_foreign_key "frames", "pins", column: "pins_id"
 end
