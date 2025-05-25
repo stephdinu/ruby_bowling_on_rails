@@ -2,7 +2,7 @@ class Frame < ApplicationRecord
   has_many :pins, dependent: :destroy
   belongs_to :game
 
-  after_create :create_default_pins
+  after_create :initialize_pins
 
   private
 
