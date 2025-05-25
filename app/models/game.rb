@@ -1,14 +1,12 @@
 class Game < ApplicationRecord
-  has_one :player
-  has_many :frames
+  belongs_to :player
+  has_many :frames, dependent: :destroy
 
-  validates :player, presence: true
-
-  after_create :create_default_frames
+  after_create :initialize_frames
 
   private
 
-  def create_default_frames
+  def initialize_frames
     10.times do |i|
       tries = (i == 9) ? 2 : 2
       frames.create(position: i+1, tries: tries)

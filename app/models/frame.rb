@@ -6,9 +6,9 @@ class Frame < ApplicationRecord
 
   private
 
-  def create_default_pins
+  def initialize_pins
     10.times do
-      pins.create()
+      pins.create(down: false)
     end
   end
 
