@@ -1,4 +1,5 @@
-# ruby_bowling_on_rails
+# Ruby Bowling on Rails
+
 Ruby on Rails API for a bowling game.
 
-Testing something :)
+This README will be completed at a later date.
