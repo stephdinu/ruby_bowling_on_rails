@@ -2,6 +2,8 @@ class Game < ApplicationRecord
   has_one :player
   has_many :frames
 
+  validates :player, presence: true
+
   after_create :create_default_frames
 
   private

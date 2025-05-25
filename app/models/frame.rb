@@ -13,4 +13,16 @@ class Frame < ApplicationRecord
       pins.create()
     end
   end
+
+  def count_knocked_down_pins
+    pins.where(down: true).count
+  end
+
+  def is_strike
+    tries == 1 && count_knocked_down_pins == 10
+  end
+
+  def is_spare
+    tries == 2 && count_knocked_down_pins == 10
+  end
 end
