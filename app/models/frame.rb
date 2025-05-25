@@ -1,10 +1,8 @@
 class Frame < ApplicationRecord
-  has_many :pins
+  has_many :pins, dependent: :destroy
   belongs_to :game
 
   after_create :create_default_pins
-
-  attribute: :tries, default: -> { 2 }
 
   private
 
@@ -24,5 +22,14 @@ class Frame < ApplicationRecord
 
   def is_spare
     tries == 2 && count_knocked_down_pins == 10
+  end
+
+  def extra_tries_available?
+    position == 10 && (is_strike || is_spare)
+  end
+
+  def max_tries
+    return 3 if extra_tries_available?
+    2
   end
 end

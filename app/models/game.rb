@@ -9,8 +9,9 @@ class Game < ApplicationRecord
   private
 
   def create_default_frames
-    10.times do
-      frames.create()
+    10.times do |i|
+      tries = (i == 9) ? 2 : 2
+      frames.create(position: i+1, tries: tries)
     end
   end
 end
