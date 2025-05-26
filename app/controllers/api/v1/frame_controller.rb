@@ -21,6 +21,19 @@ class Api::V1::FrameController < ApplicationController
 		render json: @frame, include: :pins
 	end
 
+	def roll
+		frame = Frame.find(params[:id])
+		knocked_down_pins = params[:knocked_down_pins].to_i
+
+		begin
+			frame.roll(knocked_down_pins)
+			render json: frame.reload, include: :pins
+		rescue => error
+			render json: { error: error.message }, status: :unprocessable_entity
+		end
+	end
+
+
 	def update
 		if @frame.update(frame_params)
 			render json: @frame

@@ -80,16 +80,16 @@ frame1.pins.where(down: true)
 
 # Roll again!
 manager.roll(2)
-frame.reload.pins.where(down: true).count # -> 9
-frame.is_complete # -> true
+frame1.reload.pins.where(down: true).count # -> 9
+frame1.is_complete # -> true
 
 # Next Frame
 frame2 = manager.roll(10)
-frame2.is_spare # -> true
+frame2.is_strike # -> true
 frame2.is_complete # -> true
 
 # Check if all frames in the game are complete
-game.frames.map { |f| [f.position, f.complete] }
+game.frames.map { |f| [f.position, f.is_complete] }
 
 # Check your total score
 GameScoreboardService.new(game).calculate_total_score

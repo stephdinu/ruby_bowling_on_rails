@@ -4,31 +4,6 @@ class Frame < ApplicationRecord
 
   after_create :initialize_pins
 
-  private
-
-  def initialize_pins
-    10.times do
-      pins.create(down: false)
-    end
-  end
-
-  def count_knocked_down_pins
-    pins.where(down: true).count
-  end
-
-  def count_remaining_pins
-    pins.where(down: false).count
-  end
-
-  def roll(knocked_down_pins)
-    raise "Frame already has 2 tries!" if tries >= 2 && number < 10
-    raise "Frame is complete!" if is_complete
-
-    pins_to_knock_down = count_remaining_pins.limit(knocked_down_pins)
-    pins_to_knock_down.update_all(down: true)
-    increment!(:tries)
-  end
-
   def is_strike
     tries == 1 && count_knocked_down_pins == 10
   end
@@ -38,7 +13,32 @@ class Frame < ApplicationRecord
   end
 
   def is_complete
-    number < 10 ? is_strike || tries == 2 : is_tenth_frame_complete
+    position < 10 ? is_strike || tries == 2 : is_tenth_frame_complete
+  end
+
+  def count_knocked_down_pins
+    pins.where(down: true).count
+  end
+
+  def roll(knocked_down_pins)
+    raise "Frame already has 2 tries!" if tries >= 2 && position < 10
+    raise "Frame is complete!" if is_complete
+
+    pins_to_knock_down = remaining_pins.limit(knocked_down_pins)
+    pins_to_knock_down.update_all(down: true)
+    increment!(:tries)
+  end
+
+  private
+
+  def initialize_pins
+    10.times do
+      pins.create(down: false)
+    end
+  end
+
+  def remaining_pins
+    pins.where(down: false)
   end
 
   def extra_tries_available?
