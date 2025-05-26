@@ -66,7 +66,7 @@ bundle exec rspec
 ## Example Usage in Rails Console
 After running `rails c`, enter the following:
 ```bash
-player = Player.create(name: "Alice")
+player = Player.create(name: "Stephanie")
 game = player.games.create
 game.frames.count
 game.frames.first.pins.count
