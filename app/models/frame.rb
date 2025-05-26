@@ -20,12 +20,17 @@ class Frame < ApplicationRecord
     pins.where(down: true).count
   end
 
-  def roll(knocked_down_pins)
+  def roll(knocked_down_pins = nil)
     raise "Frame already has 2 tries!" if tries >= 2 && position < 10
     raise "Frame is complete!" if is_complete
 
+    remaining = remaining_pins
+
+    knocked_down_pins ||= rand(0..remaining.count)
+
     pins_to_knock_down = remaining_pins.limit(knocked_down_pins)
     pins_to_knock_down.update_all(down: true)
+    
     increment!(:tries)
   end
 

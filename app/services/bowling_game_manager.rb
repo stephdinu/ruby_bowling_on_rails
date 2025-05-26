@@ -4,7 +4,7 @@ class BowlingGameManager
 		@game = game
 	end
 
-	def roll(knocked_down_pins)
+	def roll(knocked_down_pins = nil)
 		current_frame = next_playable_frame
 		raise "Game is complete!" unless current_frame
 

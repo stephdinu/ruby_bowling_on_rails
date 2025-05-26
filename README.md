@@ -66,33 +66,34 @@ bundle exec rspec
 ## Example Usage in Rails Console
 After running `rails c`, enter the following:
 ```bash
-player = Player.create(name: "Stephanie")
-game = player.games.create
-game.frames.count
-game.frames.first.pins.count
-# Automatically creates 10 frames with 10 pins each
-# Update pin states manually for now
+player = Player.create(name: "Alice") # create a new player
+game = player.games.create # create a new game
 
-manager = BowlingGameManager.new(game)
+manager = BowlingGameManager.new(game) # create a new manager
 
-frame1 = manager.roll(7)
-frame1.pins.where(down: true)
+# Here is a step-by-step play:
+frame1 = manager.roll
+knocked_down = frame1.pins.where(down: true).count
+standing1 = frame1.pins.where(down: false).count
 
-# Roll again!
-manager.roll(2)
-frame1.reload.pins.where(down: true).count # -> 9
-frame1.is_complete # -> true
+puts "Frame #{frame.position}, Try #{frame.tries}: #{knocked_down} knocked down, #{standing} standing"
 
-# Next Frame
-frame2 = manager.roll(10)
-frame2.is_strike # -> true
-frame2.is_complete # -> true
+# Roll again (if you can ;) )
+manager.roll
+frame1.reload.pins.where(down: true).count
+frame1.is_complete
 
-# Check if all frames in the game are complete
+frame2 = manager.roll
+frame2.is_strike # maybe you were lucky this time!
+frame2.is_complete
+
+# Check how many more frames in the game you can play
 game.frames.map { |f| [f.position, f.is_complete] }
 
 # Check your total score
 GameScoreboardService.new(game).calculate_total_score
-player.reload.score
+player.reload_score
+
+# Continue playing if you feel lucky enough!
 ```
 
