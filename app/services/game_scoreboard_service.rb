@@ -10,9 +10,9 @@ class GameScoreboardService
 		frames.each_with_index do |frame, index|
 			frame_score = frame.count_knocked_down_pins
 
-			if frame.strike?
+			if frame.is_strike
 				frame_score += award_strike_bonus(frames, index)
-			elsif frame.spare?
+			elsif frame.is_spare
 				frame_score += award_spare_bonus(frames, index)
 			end
 

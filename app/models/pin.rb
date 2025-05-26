@@ -1,5 +1,5 @@
 class Pin < ApplicationRecord
-	validates :down, presence: true
-	attribute :down, default: -> { false }
 	belongs_to :frame
+	attribute :down, default: false
+	validates :down, inclusion: { in: [true, false] }
 end

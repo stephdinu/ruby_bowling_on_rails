@@ -20,6 +20,11 @@ class Api::V1::PlayerController < ApplicationController
 		end
 	end
 
+	def show
+		player = Player.find(params[:id])
+		render json: player
+	end
+
 	def update
 		if @player.update(player_params)
 			render json: @player
@@ -40,6 +45,6 @@ class Api::V1::PlayerController < ApplicationController
 	end
 
 	def player_params
-		params.require(:player).permit(:name, :score)
+		params.require(:player).permit(:name)
 	end
 end

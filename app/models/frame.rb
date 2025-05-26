@@ -16,12 +16,29 @@ class Frame < ApplicationRecord
     pins.where(down: true).count
   end
 
+  def count_remaining_pins
+    pins.where(down: false).count
+  end
+
+  def roll(knocked_down_pins)
+    raise "Frame already has 2 tries!" if tries >= 2 && number < 10
+    raise "Frame is complete!" if is_complete
+
+    pins_to_knock_down = count_remaining_pins.limit(knocked_down_pins)
+    pins_to_knock_down.update_all(down: true)
+    increment!(:tries)
+  end
+
   def is_strike
     tries == 1 && count_knocked_down_pins == 10
   end
 
   def is_spare
     tries == 2 && count_knocked_down_pins == 10
+  end
+
+  def is_complete
+    number < 10 ? is_strike || tries == 2 : is_tenth_frame_complete
   end
 
   def extra_tries_available?
@@ -31,5 +48,11 @@ class Frame < ApplicationRecord
   def max_tries
     return 3 if extra_tries_available?
     2
+  end
+
+  def is_tenth_frame_complete
+    return false if tries < 2
+    return true if tries == 3
+    tries == 2 && count_knocked_down_pins < 10
   end
 end

@@ -68,15 +68,31 @@ After running `rails c`, enter the following:
 ```bash
 player = Player.create(name: "Alice")
 game = player.games.create
+game.frames.count
+game.frames.first.pins.count
 # Automatically creates 10 frames with 10 pins each
 # Update pin states manually for now
 
-frame1 = game.frames.first
-frame1.pins.each { |pin| pin.update(down: true) } 
-# simulate a strike
+manager = BowlingGameManager.new(game)
 
-frame1.update(tries: 1)
+frame1 = manager.roll(7)
+frame1.pins.where(down: true)
 
+# Roll again!
+manager.roll(2)
+frame.reload.pins.where(down: true).count # -> 9
+frame.is_complete # -> true
+
+# Next Frame
+frame2 = manager.roll(10)
+frame2.is_spare # -> true
+frame2.is_complete # -> true
+
+# Check if all frames in the game are complete
+game.frames.map { |f| [f.position, f.complete] }
+
+# Check your total score
 GameScoreboardService.new(game).calculate_total_score
 player.reload.score
 ```
+

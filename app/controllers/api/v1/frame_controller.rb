@@ -6,10 +6,6 @@ class Api::V1::FrameController < ApplicationController
 		render json: @frame
 	end
 
-	def show
-		render json: @frame
-	end
-
 	def create
 		@frame = Frame.new(frame_params)
 
@@ -18,6 +14,11 @@ class Api::V1::FrameController < ApplicationController
 		else
 			render json: @frame.errors, status: :unprocessable_entity
 		end
+	end
+
+	def show
+		frame = Frame.find(params[:id])
+		render json: @frame, include: :pins
 	end
 
 	def update

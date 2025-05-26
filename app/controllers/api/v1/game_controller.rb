@@ -11,7 +11,8 @@ class Api::V1::GameController < ApplicationController
 	end
 
 	def create
-		@game = Game.new(game_params)
+		player = Player.find(params[:player_id])
+		@game = player.games.create!
 
 		if @game.save
 			render json: @game, status: :created
@@ -19,6 +20,10 @@ class Api::V1::GameController < ApplicationController
 			render json: @game.errors, status: :unprocessable_entity
 		end
 	end
+
+	def show
+		game = Game.find(params[:id])
+		render json: game, include: { frames: { include: :pins} }
 
 	def update
 		if @game.update(game)
